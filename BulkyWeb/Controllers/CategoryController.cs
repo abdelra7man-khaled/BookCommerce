@@ -1,11 +1,10 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace BulkyWeb.Controllers
 {
-    public class CategoryController (AppDbContext _context): Controller
+    public class CategoryController(AppDbContext _context) : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -34,12 +33,12 @@ namespace BulkyWeb.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if(id is null || id == 0)
+            if (id is null || id == 0)
                 return NotFound();
 
             Category? categoryToEdit = _context.Categories.Find(id);
 
-            if(categoryToEdit is null)
+            if (categoryToEdit is null)
                 return NotFound();
 
             return View(categoryToEdit);
@@ -48,7 +47,7 @@ namespace BulkyWeb.Controllers
         [HttpPost]
         public IActionResult SaveEdit(Category categoryToEdit)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Categories.Update(categoryToEdit);
                 _context.SaveChanges();
