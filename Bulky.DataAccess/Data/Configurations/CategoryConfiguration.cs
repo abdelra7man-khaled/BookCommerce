@@ -1,8 +1,8 @@
-﻿using Bulky.Models;
+﻿using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Bulky.DataAccess.Data.Configurations
+namespace BulkyBook.DataAccess.Data.Configurations
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
