@@ -17,7 +17,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             return View(products);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id) // Update || Create
         {
             ProductVM productVM = new()
             {
@@ -29,11 +29,25 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     Value = c.Id.ToString()
                 })
             };
-            return View(productVM);
+
+            if (id == null || id == 0)
+            {
+                // Create
+                return View(productVM);
+            }
+            else
+            {
+                // Update
+                productVM.Product = _productRepository.Get(p => p.Id == id)!;
+                if (productVM.Product == null)
+                    return NotFound();
+
+                return View(productVM);
+            }
         }
 
         [HttpPost]
-        public IActionResult SaveCreate(ProductVM newProduct)
+        public IActionResult SaveChanges(ProductVM newProduct, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
@@ -54,31 +68,31 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Edit(int? id)
-        {
-            if (id is null || id == 0)
-                return NotFound();
+        //public IActionResult Edit(int? id)
+        //{
+        //    if (id is null || id == 0)
+        //        return NotFound();
 
-            Product? productToEdit = _productRepository.Get(c => c.Id == id);
+        //    Product? productToEdit = _productRepository.Get(c => c.Id == id);
 
-            if (productToEdit is null)
-                return NotFound();
+        //    if (productToEdit is null)
+        //        return NotFound();
 
-            return View(productToEdit);
-        }
+        //    return View(productToEdit);
+        //}
 
-        [HttpPost]
-        public IActionResult SaveEdit(Product productToEdit)
-        {
-            if (ModelState.IsValid)
-            {
-                _productRepository.Update(productToEdit);
-                _productRepository.Save();
-                TempData["success"] = "Product updated successfully";
-                return RedirectToAction("Index");
-            }
-            return View("Edit");
-        }
+        //[HttpPost]
+        //public IActionResult SaveEdit(Product productToEdit)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _productRepository.Update(productToEdit);
+        //        _productRepository.Save();
+        //        TempData["success"] = "Product updated successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View("Edit");
+        //}
 
         public IActionResult Delete(int? id)
         {
