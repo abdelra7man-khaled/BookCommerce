@@ -40,6 +40,9 @@
                                 <li class="nav-item">
                                     <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                             </ul>
                         </li>
@@ -66,3 +69,11 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+   
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0; 
+    }
+    
+</style>

@@ -1,0 +1,107 @@
+﻿@model ProductVM
+
+<div class="card shadow border-0 my-4">
+	<div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h2 class="text-white py-2 text-center">Create Product</h2>
+			</div>
+		</div>
+	</div>
+	<div class="card-body p-4">
+		<form asp-action="SaveCreate" asp-controller="Product" method="post" class="row">
+			<div class="border p-3">
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Title" class="form-control border-0 shadow name-textbox" />
+					<label asp-for="Product.Title" class="ms-2"></label>
+					<span asp-validation-for="Product.Title" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Description" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.Description" class="ms-2"></label>
+					<span asp-validation-for="Product.Description" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.ISBN" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.ISBN" class="ms-2"></label>
+					<span asp-validation-for="Product.ISBN" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Author" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.Author" class="ms-2"></label>
+					<span asp-validation-for="Product.Author" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.ListPrice" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.ListPrice" class="ms-2"></label>
+					<span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Price" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.Price" class="ms-2"></label>
+					<span asp-validation-for="Product.Price" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Price50" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.Price50" class="ms-2"></label>
+					<span asp-validation-for="Product.Price50" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.Price100" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.Price100" class="ms-2"></label>
+					<span asp-validation-for="Product.Price100" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow">
+						<option disabled selected>--Select Category--</option>
+					</select>
+					<label asp-for="@Model.Product.CategoryId" class="ms-2"></label>
+					<span asp-validation-for="@Model.Product.CategoryId" class="text-danger"></span>
+				</div>
+				<div class="form-floating py-2 col-12">
+					<input asp-for="Product.ImageUrl" class="form-control border-0 shadow order-textbox" />
+					<label asp-for="Product.ImageUrl" class="ms-2"></label>
+					<span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+				</div>
+				<div class="row pt-2 buttons">
+					<div class="col-6 col-md-3 create-button">
+						<button type="submit" class="btn btn-primary form-control">Create</button>
+					</div>
+					<div class="col-6 col-md-3 back-button">
+						<a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary form-control">Back</a>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+	:root {
+		--main-color: gray;
+	}
+
+	.buttons {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 60px;
+	}
+
+	.buttons .back-button a {
+		background-color: lightgray;
+	}
+	.buttons .back-button a:hover{ 
+		background-color: var(--main-color);
+	}
+
+	.form-control.name-textbox:focus,
+	.form-control.order-textbox:focus {
+		border: 1px solid var(--main-color) ;
+		box-shadow: none;
+	}
+</style>

@@ -12,5 +12,7 @@ namespace BulkyBook.Models
         [Display(Name = "Display Order")]
         [Range(1, 100, ErrorMessage = "Display Order must be between 1 and 100")]
         public int DisplayOrder { get; set; }
+
+        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
