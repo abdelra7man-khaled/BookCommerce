@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductController(IProductRepository _productRepository, ICategoryRepository _categoryRepository) : Controller
+    public class ProductController(IProductRepository _productRepository, ICategoryRepository _categoryRepository, IWebHostEnvironment _webHostEnviroment) : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -47,18 +47,49 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveChanges(ProductVM newProduct, IFormFile? file)
+        public IActionResult SaveChanges(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _productRepository.Add(newProduct.Product);
+                string wwwRootPath = _webHostEnviroment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\products");
+
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        string oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\products\" + fileName;
+                }
+
+                if (productVM.Product.Id == 0)
+                {
+                    _productRepository.Add(productVM.Product);
+                }
+                else
+                {
+                    _productRepository.Update(productVM.Product);
+                }
                 _productRepository.Save();
-                TempData["success"] = "Product created successfully";
+                TempData["success"] = $"Product created successfully";
                 return RedirectToAction("Index");
             }
             else
             {
-                newProduct.CategoryList = _categoryRepository.GetAll()
+                productVM.CategoryList = _categoryRepository.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
