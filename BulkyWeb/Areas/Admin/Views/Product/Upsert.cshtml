@@ -9,7 +9,9 @@
 		</div>
 	</div>
 	<div class="card-body p-4">
-		<form asp-action="SaveChanges" asp-controller="Product" method="post" asp-route-id = "@Model.Product.Id" class="row" enctype="multipart/form-data">
+		<form asp-action="SaveChanges" asp-controller="Product" method="post" class="row" enctype="multipart/form-data">
+			<input asp-for="Product.Id" hidden />
+			<input asp-for="Product.ImageUrl" hidden />
 			<div class="row">
 				<div class="col-10">
 					<div class="border p-3">
@@ -65,7 +67,7 @@
 							<label asp-for="Product.ImageUrl" class="ms-2"></label>
 						</div>
 						<div class="row pt-2 buttons">
-							<div class="col-6 col-md-3 create-button">
+							<div class="col-6 col-md-3">
 								@if (Model.Product.Id == 0)
 								{
 									<button type="submit" class="btn btn-primary form-control">Create</button>

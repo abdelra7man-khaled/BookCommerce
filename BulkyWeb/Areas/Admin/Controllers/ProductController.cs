@@ -75,16 +75,18 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     productVM.Product.ImageUrl = @"\images\products\" + fileName;
                 }
 
+                bool isNewProduct = false;
                 if (productVM.Product.Id == 0)
                 {
                     _productRepository.Add(productVM.Product);
+                    isNewProduct = true;
                 }
                 else
                 {
                     _productRepository.Update(productVM.Product);
                 }
                 _productRepository.Save();
-                TempData["success"] = $"Product created successfully";
+                TempData["success"] = $"Product {(isNewProduct ? "created" : "updated")} successfully";
                 return RedirectToAction("Index");
             }
             else
@@ -95,35 +97,9 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     Text = c.Name,
                     Value = c.Id.ToString()
                 });
-                return View("Create");
+                return View("Upsert");
             }
         }
-
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id is null || id == 0)
-        //        return NotFound();
-
-        //    Product? productToEdit = _productRepository.Get(c => c.Id == id);
-
-        //    if (productToEdit is null)
-        //        return NotFound();
-
-        //    return View(productToEdit);
-        //}
-
-        //[HttpPost]
-        //public IActionResult SaveEdit(Product productToEdit)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _productRepository.Update(productToEdit);
-        //        _productRepository.Save();
-        //        TempData["success"] = "Product updated successfully";
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View("Edit");
-        //}
 
         public IActionResult Delete(int? id)
         {
