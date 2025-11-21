@@ -12,7 +12,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Product> products = _productRepository.GetAll().ToList();
+            List<Product> products = _productRepository.GetAll(includeProperties: "Category").ToList();
 
             return View(products);
         }
