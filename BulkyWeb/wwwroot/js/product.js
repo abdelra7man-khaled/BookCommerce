@@ -44,7 +44,6 @@ function Delete(url) {
                     dataTable.ajax.reload();
                     toastr.success(data.message);
                 }
-
             })
         }
     });

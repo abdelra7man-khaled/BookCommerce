@@ -101,32 +101,6 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
         }
 
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (id is null || id == 0)
-        //        return NotFound();
-
-        //    Product? productToDelete = _productRepository.Get(c => c.Id == id);
-
-        //    if (productToDelete is null)
-        //        return NotFound();
-
-        //    return View(productToDelete);
-        //}
-
-        //[HttpPost]
-        //public IActionResult ConfirmDelete(int? id)
-        //{
-        //    Product? productToDelete = _productRepository.Get(c => c.Id == id);
-        //    if (productToDelete is null)
-        //        return NotFound();
-
-        //    _productRepository.Remove(productToDelete);
-        //    _productRepository.Save();
-        //    TempData["success"] = "Product Deleted successfully";
-        //    return RedirectToAction("Index");
-        //}
-
         #region API CALLS
 
         [HttpGet]
