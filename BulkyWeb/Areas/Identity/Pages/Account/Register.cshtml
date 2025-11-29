@@ -73,7 +73,7 @@
                         </select>
                     </div>
                     <div class="form-floating mb-3 col-md-6">
-                        <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select">
+                        <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select" style="display: none;">
                             <option selected disabled>--Select Role--</option>
                         </select>
                     </div>
@@ -129,6 +129,18 @@
 
             if (password) password.type = type;
             if (confirmPassword) confirmPassword.type = type;
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#Input_Role").change(function () {
+                const selectedRole = $("#Input_Role Option:Selected").text();
+                if (selectedRole === "Company") {
+                    $("#Input_CompanyId").show();
+                } else {
+                    $("#Input_CompanyId").hide();
+                }
+			});
         });
     </script>
 
