@@ -25,6 +25,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
