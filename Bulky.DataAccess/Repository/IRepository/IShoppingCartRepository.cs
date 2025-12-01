@@ -4,7 +4,7 @@ namespace BulkyBook.DataAccess.Repository.IRepository
 {
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
-        void Update(Category categoryToUpdate);
+        void Update(ShoppingCart cartToUpdate);
         void Save();
     }
 }

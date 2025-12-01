@@ -11,6 +11,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IShoppingCartRepository _shoppingCartRepository;
         public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _logger = logger;
@@ -26,8 +27,14 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Details(int id)
         {
-            Product product = _productRepository.Get(p => p.Id == id, includeProperties: "Category")!;
-            return View(product);
+            ShoppingCart cart = new ShoppingCart
+            {
+                Product = _productRepository.Get(p => p.Id == id, includeProperties: "Category")!,
+                ProductId = id,
+                Count = 1
+            };
+
+            return View(cart);
         }
 
 
