@@ -86,5 +86,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             TempData["success"] = "Category Deleted successfully";
             return RedirectToAction("Index");
         }
+
+
     }
+
 }
