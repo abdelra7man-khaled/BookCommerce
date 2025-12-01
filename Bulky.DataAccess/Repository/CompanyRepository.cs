@@ -15,10 +15,6 @@ namespace BulkyBook.DataAccess.Repository
         {
             _context.Update(companyToUpdate);
         }
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
 
     }
 }

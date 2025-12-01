@@ -8,12 +8,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = StaticDetails.Role_Admin)]
-    public class CategoryController(ICategoryRepository _categoryRepository) : Controller
+    public class CategoryController(IUnitOfWork _unitOfWork) : Controller
     {
         [HttpGet]
         public IActionResult Index()
         {
-            List<Category> cotegories = _categoryRepository.GetAll().ToList();
+            List<Category> cotegories = _unitOfWork.Category.GetAll().ToList();
             return View(cotegories);
         }
 
@@ -27,8 +27,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepository.Add(newCategory);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Add(newCategory);
+                _unitOfWork.Save();
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
@@ -40,7 +40,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             if (id is null || id == 0)
                 return NotFound();
 
-            Category? categoryToEdit = _categoryRepository.Get(c => c.Id == id);
+            Category? categoryToEdit = _unitOfWork.Category.Get(c => c.Id == id);
 
             if (categoryToEdit is null)
                 return NotFound();
@@ -53,8 +53,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepository.Update(categoryToEdit);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Update(categoryToEdit);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
@@ -66,7 +66,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             if (id is null || id == 0)
                 return NotFound();
 
-            Category? categoryToDelete = _categoryRepository.Get(c => c.Id == id);
+            Category? categoryToDelete = _unitOfWork.Category.Get(c => c.Id == id);
 
             if (categoryToDelete is null)
                 return NotFound();
@@ -77,12 +77,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ConfirmDelete(int? id)
         {
-            Category? categoryToDelete = _categoryRepository.Get(c => c.Id == id);
+            Category? categoryToDelete = _unitOfWork.Category.Get(c => c.Id == id);
             if (categoryToDelete is null)
                 return NotFound();
 
-            _categoryRepository.Remove(categoryToDelete);
-            _categoryRepository.Save();
+            _unitOfWork.Category.Remove(categoryToDelete);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted successfully";
             return RedirectToAction("Index");
         }

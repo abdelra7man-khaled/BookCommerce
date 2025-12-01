@@ -10,12 +10,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = StaticDetails.Role_Admin)]
-    public class ProductController(IProductRepository _productRepository, ICategoryRepository _categoryRepository, IWebHostEnvironment _webHostEnviroment) : Controller
+    public class ProductController(IUnitOfWork _unitOfWork, IWebHostEnvironment _webHostEnviroment) : Controller
     {
         [HttpGet]
         public IActionResult Index()
         {
-            List<Product> products = _productRepository.GetAll(includeProperties: "Category").ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
 
             return View(products);
         }
@@ -25,7 +25,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             ProductVM productVM = new()
             {
                 Product = new(),
-                CategoryList = _categoryRepository.GetAll()
+                CategoryList = _unitOfWork.Category.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
@@ -41,7 +41,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             else
             {
                 // Update
-                productVM.Product = _productRepository.Get(p => p.Id == id)!;
+                productVM.Product = _unitOfWork.Product.Get(p => p.Id == id)!;
                 if (productVM.Product == null)
                     return NotFound();
 
@@ -81,20 +81,20 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 bool isNewProduct = false;
                 if (productVM.Product.Id == 0)
                 {
-                    _productRepository.Add(productVM.Product);
+                    _unitOfWork.Product.Add(productVM.Product);
                     isNewProduct = true;
                 }
                 else
                 {
-                    _productRepository.Update(productVM.Product);
+                    _unitOfWork.Product.Update(productVM.Product);
                 }
-                _productRepository.Save();
+                _unitOfWork.Save();
                 TempData["success"] = $"Product {(isNewProduct ? "created" : "updated")} successfully";
                 return RedirectToAction("Index");
             }
             else
             {
-                productVM.CategoryList = _categoryRepository.GetAll()
+                productVM.CategoryList = _unitOfWork.Category.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
@@ -109,14 +109,14 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            List<Product> products = _productRepository.GetAll(includeProperties: "Category").ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             return Json(new { data = products });
         }
 
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            var productToDelete = _productRepository.Get(u => u.Id == id);
+            var productToDelete = _unitOfWork.Product.Get(u => u.Id == id);
             if (productToDelete == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
@@ -129,8 +129,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 System.IO.File.Delete(oldImagePath);
             }
 
-            _productRepository.Remove(productToDelete);
-            _productRepository.Save();
+            _unitOfWork.Product.Remove(productToDelete);
+            _unitOfWork.Save();
 
             return Json(new { success = true, message = "the product deleted successfully" });
         }

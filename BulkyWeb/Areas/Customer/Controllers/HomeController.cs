@@ -1,7 +1,9 @@
 using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Customer.Controllers
 {
@@ -9,32 +11,42 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IProductRepository _productRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IShoppingCartRepository _shoppingCartRepository;
-        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICategoryRepository categoryRepository)
+        IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Product> products = _productRepository.GetAll(includeProperties: "Category");
+            IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(products);
         }
 
         public IActionResult Details(int id)
         {
-            ShoppingCart cart = new ShoppingCart
+            ShoppingCart cart = new()
             {
-                Product = _productRepository.Get(p => p.Id == id, includeProperties: "Category")!,
+                Product = _unitOfWork.Product.Get(p => p.Id == id, includeProperties: "Category")!,
                 ProductId = id,
                 Count = 1
             };
 
             return View(cart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddProductToCart(ShoppingCart cart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity!;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            cart.ApplicationUserId = userId!;
+            _unitOfWork.ShoppingCart.Add(cart);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
 

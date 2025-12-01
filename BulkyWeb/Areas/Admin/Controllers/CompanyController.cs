@@ -8,12 +8,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = StaticDetails.Role_Admin)]
-    public class CompanyController(ICompanyRepository _companyRepository) : Controller
+    public class CompanyController(IUnitOfWork _unitOfWork) : Controller
     {
         [HttpGet]
         public IActionResult Index()
         {
-            List<Company> companies = _companyRepository.GetAll().ToList();
+            List<Company> companies = _unitOfWork.Company.GetAll().ToList();
 
             return View(companies);
         }
@@ -29,7 +29,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             else
             {
                 // Update
-                Company company = _companyRepository.Get(p => p.Id == id)!;
+                Company company = _unitOfWork.Company.Get(p => p.Id == id)!;
                 if (company == null)
                     return NotFound();
 
@@ -46,14 +46,14 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 bool isNewCompany = false;
                 if (company.Id == 0)
                 {
-                    _companyRepository.Add(company);
+                    _unitOfWork.Company.Add(company);
                     isNewCompany = true;
                 }
                 else
                 {
-                    _companyRepository.Update(company);
+                    _unitOfWork.Company.Update(company);
                 }
-                _companyRepository.Save();
+                _unitOfWork.Save();
                 TempData["success"] = $"Company {(isNewCompany ? "created" : "updated")} successfully";
                 return RedirectToAction("Index");
             }
@@ -68,21 +68,21 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            List<Company> companies = _companyRepository.GetAll().ToList();
+            List<Company> companies = _unitOfWork.Company.GetAll().ToList();
             return Json(new { data = companies });
         }
 
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            var companyToDelete = _companyRepository.Get(u => u.Id == id);
+            var companyToDelete = _unitOfWork.Company.Get(u => u.Id == id);
             if (companyToDelete == null)
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-            _companyRepository.Remove(companyToDelete);
-            _companyRepository.Save();
+            _unitOfWork.Company.Remove(companyToDelete);
+            _unitOfWork.Save();
 
             return Json(new { success = true, message = "the company deleted successfully" });
         }
