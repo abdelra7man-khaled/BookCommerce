@@ -9,15 +9,9 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [Authorize]
-    public class CartController : Controller
+    public class CartController(IUnitOfWork _unitOfWork) : Controller
     {
-        private IUnitOfWork _unitOfWork;
         public ShoppingCartVM ShoppingCartVM { get; set; }
-
-        public CartController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
 
         public IActionResult Index()
         {
