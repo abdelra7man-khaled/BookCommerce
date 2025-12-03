@@ -1,38 +1,40 @@
 📘 Project Overview
 
-This project is a fully functional E-Commerce Platform built for learning and real-world implementation.
-It demonstrates how to build scalable enterprise-level applications using:
+This project is a fully functional E-Commerce Platform built for both learning and real-world implementation.
+It demonstrates how to build scalable enterprise-level applications using modern ASP.NET technologies.
+
+🧰 Technologies Demonstrated
 
 ✔ ASP.NET Core MVC (.NET 9)
 ✔ N-Tier Architecture
 ✔ Identity Framework for Authentication & Authorization
-✔ Stripe for Payments
-✔ EF Core with Code-First Migrations
-✔ Repository Pattern
-✔ Azure Deployment
+✔ Stripe Payment Gateway
+✔ Entity Framework Core (Code-First Migrations)
+✔ Repository & Unit of Work Pattern
+✔ Azure Cloud Deployment
 
-The system includes product management, shopping cart, checkout, order processing, role management, and email notifications.
+The system includes product management, shopping cart, checkout, order processing, role-based access, and email notifications.
 
 🚀 Features
 🔐 Authentication & Authorization
 
 ASP.NET Core Identity (RCL-based)
 
-Extended user fields (Name, City, Address, etc.)
+Extended user profile fields (Name, City, Address, etc.)
 
-Role management (Admin, Customer, Employee , Company)
+Role management: Admin, Customer, Employee, Company
 
-Login, Register, Forgot Password, Lockout
+Login, Register, Forgot Password, Lockout features
 
 🛍 E-Commerce Core Functionalities
 
 Product Catalog
 
-Categories 
+Categories
 
 Shopping Cart
 
-Checkout Process
+Full Checkout Process
 
 Order Summary & Order Tracking
 
@@ -44,7 +46,7 @@ Email Notifications
 
 Responsive UI using Bootstrap v5
 
-Clean Razor Views + Layout + Partials
+Clean Razor Views with Layouts & Partials
 
 Custom Tag Helpers
 
@@ -52,11 +54,12 @@ View Components
 
 ⚙ Application Logic
 
-N-Tier Architecture (UI , Controllers (Web) , Models, Data Access)
+N-Tier Architecture
+(UI → Controllers → Models → Data Access)
 
 Repository & Unit of Work Pattern
 
-Entity Framework Core (Code-First)
+EF Core (Code-First Migrations)
 
 Automatic Database Seeding
 
@@ -64,18 +67,16 @@ Sessions & TempData
 
 ☁ Deployment
 
-Configured for Microsoft Azure App Service
-
+Optimized and configured for Microsoft Azure App Service
 
 🏛 Architecture
 
-This project uses a clean N-Tier Architecture:
+This project follows a clean, modular N-Tier Architecture:
 
 📂 ECommerceApp
- ├── 📁 ECommerceApp.Web          → Presentation Layer (MVC, Razor)
- ├── 📁 ECommerceApp.Models         → Business Logic, Entities, Models
- ├── 📁 ECommerceApp.DataAccess   → EF Core, Repositories, Migrations
-
+ ├── 📁 ECommerceApp.Web           → Presentation Layer (MVC, Razor)
+ ├── 📁 ECommerceApp.Models        → Business Logic, Entities, ViewModels
+ ├── 📁 ECommerceApp.DataAccess    → EF Core, Repositories, Migrations
 
 ✔ Why N-Tier?
 
@@ -87,45 +88,44 @@ Reusability
 
 Testability
 
-Cleaner codebase
+Cleaner, scalable codebase
 
 🛠 Technologies Used
 Technology	Purpose
-ASP.NET Core (.NET 9)	Main framework
+ASP.NET Core (.NET 9)	Application framework
 ASP.NET Core MVC	Presentation layer
-Razor Pages (Identity RCL)	User authentication
-Entity Framework Core	ORM + Migrations
+Razor Pages (Identity RCL)	Authentication UI
+Entity Framework Core	ORM & Code-First Migrations
 SQL Server	Database
 Stripe API	Payment processing
-Bootstrap v5	UI styling
-Microsoft Azure	Deployment
+Bootstrap v5	Frontend styling
+Azure Cloud	Deployment
 Repository + Unit of Work	Data access pattern
-
 🎯 Learning Objectives
 
-This project helps you learn:
+This project helps you master:
 
-✔ Structure of ASP.NET Core MVC (.NET 9) Applications
+✔ Structure of ASP.NET Core MVC (.NET 9) applications
 
-✔ Structure of ASP.NET Core Razor Projects
+✔ Structure of ASP.NET Core Razor Identity Projects
 
-✔ Fundamentals of MVC, Routing, View Rendering
+✔ MVC Fundamentals (Controllers, Routing, Views)
 
-✔ How to build large systems using N-Tier Architecture
+✔ Building enterprise apps using N-Tier Architecture
 
-✔ Integrating Identity Framework & customizing user tables
+✔ Customizing ASP.NET Core Identity
 
 ✔ Using Razor Class Library for Identity
 
-✔ Entity Framework Core + Code First Migrations
+✔ EF Core Code-First Migrations
 
-✔ Using Sessions and TempData
+✔ Sessions & TempData usage
 
-✔ Creating custom Tag Helpers
+✔ Custom Tag Helpers
 
-✔ Creating View Components and Partial Views
+✔ View Components & Partials
 
-✔ Implementing Authentication & Authorization
+✔ Authentication & Authorization
 
 ✔ Role Management
 
@@ -135,12 +135,12 @@ This project helps you learn:
 
 ✔ Using Repository Pattern & Unit of Work
 
-✔ Seeding Database Automatically
+✔ Automatic DB Seeding
 
-✔ Deploying to Microsoft Azure
+✔ Deploying to Azure
 
 🧱 Database Structure
-Main Tables:
+Main Tables
 
 Users (Identity)
 
@@ -152,4 +152,4 @@ Categories
 
 Shopping Carts
 
-All tables generated through Code-First Migrations.
+All tables are generated using EF Core Code-First Migrations.
