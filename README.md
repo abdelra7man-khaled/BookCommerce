@@ -1,155 +1,65 @@
-📘 Project Overview
+# 📚 BookStore Ecommerce - ASP.NET Core 8
 
-This project is a fully functional E-Commerce Platform built for both learning and real-world implementation.
-It demonstrates how to build scalable enterprise-level applications using modern ASP.NET technologies.
+![.NET 9](https://img.shields.io/badge/.NET-9.0-purple) ![Status](https://img.shields.io/badge/Status-Completed-success) ![License](https://img.shields.io/badge/License-MIT-blue)
 
-🧰 Technologies Demonstrated
+A complete **Book Ecommerce Application** built using **ASP.NET Core MVC (.NET 9)**. This project demonstrates enterprise-level development practices, including **N-Tier Architecture**, the **Repository Pattern**, and integration with third-party services like **Stripe** and **Identity**.
 
-✔ ASP.NET Core MVC (.NET 9)
-✔ N-Tier Architecture
-✔ Identity Framework for Authentication & Authorization
-✔ Stripe Payment Gateway
-✔ Entity Framework Core (Code-First Migrations)
-✔ Repository & Unit of Work Pattern
-✔ Azure Cloud Deployment
+## 🚀 Overview
 
-The system includes product management, shopping cart, checkout, order processing, role-based access, and email notifications.
+This application serves as a comprehensive solution for managing an online bookshop. It handles the entire flow from product management (for admins) to browsing, cart management, and secure checkout (for customers). It was built to master the fundamentals and advanced features of .NET 9.
 
-🚀 Features
-🔐 Authentication & Authorization
+## 🏗️ Architecture
 
-ASP.NET Core Identity (RCL-based)
+The solution follows a strict **N-Tier Architecture** to ensure separation of concerns and maintainability:
 
-Extended user profile fields (Name, City, Address, etc.)
+* **📂 Web (`/Web`)**: The presentation layer. Contains Controllers, Views, ViewModels, and `wwwroot` (CSS/JS). It depends on all other layers.
+* **📂 DataAccess (`/DataAccess`)**: Handles database interactions. Contains the `DbContext`, Repository implementations, and Migrations.
+* **📂 Models (`/Models`)**: Contains the domain entities (POCO classes) and Data Annotations.
+* **📂 Utility (`/Utility`)**: Cross-cutting concerns. Contains static constants, email services, and custom helper classes.
 
-Role management: Admin, Customer, Employee, Company
+---
 
-Login, Register, Forgot Password, Lockout features
+## ✨ Key Features
 
-🛍 E-Commerce Core Functionalities
+### 🛒 Functional Modules
+* **Product Management:** Complete CRUD operations for Categories and Products with image upload support.
+* **Shopping Cart:** Session-based shopping cart allowing users to add/remove items and adjust quantities.
+* **Order Management:** Admin dashboard to view order status, update shipping details, and process cancellations.
+* **Payment Integration:** Secure checkout flow integrated with **Stripe** for credit card processing.
 
-Product Catalog
+### 🔐 Authentication & Security
+* **Identity Framework:** Customized User Identity implementation (extending `IdentityUser` with additional fields).
+* **Role-Based Authorization:** Distinct roles for **Admin**, **Customer**, and **Company** users.
+* **Razor Class Library:** Integration for modifying the default Identity UI.
 
-Categories
+### ⚙️ Technical Highlights
+* **Repository Pattern & Unit of Work:** Abstraction layer over Entity Framework Core to decouple logic from the database.
+* **Entity Framework Core:** Code-First approach with automatic database seeding and migrations.
+* **Tag Helpers & View Components:** Custom UI components for dynamic navigation and notifications.
+* **TempData:** Used for toast notifications across redirects.
+* **Email Notifications:** Integrated email service for account verification and order confirmation.
 
-Shopping Cart
+### 🎨 User Interface
+* **Bootstrap 5:** Responsive design for mobile and desktop.
+* **DataTables.js:** Rich grid features (searching, sorting, paging) for Admin tables.
 
-Full Checkout Process
+---
 
-Order Summary & Order Tracking
+## 🛠️ Tech Stack
 
-Stripe Payment Integration
+* **Framework:** ASP.NET Core 9 (MVC & Razor)
+* **Language:** C#
+* **Database:** Microsoft SQL Server
+* **ORM:** Entity Framework Core
+* **Front-End:** HTML5, CSS3, Bootstrap 5, jQuery
+* **Payment Gateway:** Stripe API
+* **Cloud Deployment:** Microsoft Azure App Service / Azure SQL
 
-Email Notifications
+---
 
-🖥 Frontend Features
+## ☁️ Deployment
 
-Responsive UI using Bootstrap v5
-
-Clean Razor Views with Layouts & Partials
-
-Custom Tag Helpers
-
-View Components
-
-⚙ Application Logic
-
-N-Tier Architecture
-(UI → Controllers → Models → Data Access)
-
-Repository & Unit of Work Pattern
-
-EF Core (Code-First Migrations)
-
-Automatic Database Seeding
-
-Sessions & TempData
-
-☁ Deployment
-
-Optimized and configured for Microsoft Azure App Service
-
-🏛 Architecture
-
-This project follows a clean, modular N-Tier Architecture:
-
-📂 ECommerceApp
- ├── 📁 ECommerceApp.Web           → Presentation Layer (MVC, Razor)
- ├── 📁 ECommerceApp.Models        → Business Logic, Entities, ViewModels
- ├── 📁 ECommerceApp.DataAccess    → EF Core, Repositories, Migrations
-
-✔ Why N-Tier?
-
-Separation of concerns
-
-Maintainability
-
-Reusability
-
-Testability
-
-Cleaner, scalable codebase
-
-🛠 Technologies Used
-Technology	Purpose
-ASP.NET Core (.NET 9)	Application framework
-ASP.NET Core MVC	Presentation layer
-Razor Pages (Identity RCL)	Authentication UI
-Entity Framework Core	ORM & Code-First Migrations
-SQL Server	Database
-Stripe API	Payment processing
-Bootstrap v5	Frontend styling
-Azure Cloud	Deployment
-Repository + Unit of Work	Data access pattern
-🎯 Learning Objectives
-
-This project helps you master:
-
-✔ Structure of ASP.NET Core MVC (.NET 9) applications
-
-✔ Structure of ASP.NET Core Razor Identity Projects
-
-✔ MVC Fundamentals (Controllers, Routing, Views)
-
-✔ Building enterprise apps using N-Tier Architecture
-
-✔ Customizing ASP.NET Core Identity
-
-✔ Using Razor Class Library for Identity
-
-✔ EF Core Code-First Migrations
-
-✔ Sessions & TempData usage
-
-✔ Custom Tag Helpers
-
-✔ View Components & Partials
-
-✔ Authentication & Authorization
-
-✔ Role Management
-
-✔ Sending Email Notifications
-
-✔ Integrating Stripe Payment Gateway
-
-✔ Using Repository Pattern & Unit of Work
-
-✔ Automatic DB Seeding
-
-✔ Deploying to Azure
-
-🧱 Database Structure
-Main Tables
-
-Users (Identity)
-
-Roles
-
-Products
-
-Categories
-
-Shopping Carts
-
-All tables are generated using EF Core Code-First Migrations.
+This project is configured for easy deployment to **Microsoft Azure**.
+1.  Create an Azure App Service and Azure SQL Database.
+2.  Update the connection string in the Azure Configuration tab.
+3.  Publish directly from Visual Studio via the "Publish" profile.
