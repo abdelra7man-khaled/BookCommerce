@@ -40,8 +40,8 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         [Authorize]
         public IActionResult AddProductToCart(ShoppingCart cart)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity!;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var claimsIdentity = User.Identity! as ClaimsIdentity;
+            var userId = claimsIdentity!.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             cart.ApplicationUserId = userId!;
 

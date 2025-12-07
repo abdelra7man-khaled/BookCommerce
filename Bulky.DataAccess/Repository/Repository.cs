@@ -21,10 +21,20 @@ namespace BulkyBook.DataAccess.Repository
             _dbSet.Add(entity);
         }
 
-        public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<T> query = _dbSet;
+            if (tracked)
+            {
+                query = _dbSet;
+            }
+            else
+            {
+                query = _dbSet.AsNoTracking();
+            }
+
             query = query.Where(filter);
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

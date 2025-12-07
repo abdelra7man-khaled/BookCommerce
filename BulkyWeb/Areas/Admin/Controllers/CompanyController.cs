@@ -31,7 +31,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 // Update
                 Company company = _unitOfWork.Company.Get(p => p.Id == id)!;
                 if (company == null)
-                    return NotFound();
+                    return NotFound("Company Not Found");
 
                 return View(company);
             }
