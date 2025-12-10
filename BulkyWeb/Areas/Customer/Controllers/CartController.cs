@@ -23,12 +23,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
                     c => c.ApplicationUserId == userId,
                     includeProperties: "Product"),
+                OrderHeader = new()
             };
 
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.Price = GetPriceBasedOnQuantity(cart);
-                ShoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
 
             return View(ShoppingCartVM);
@@ -89,7 +90,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
-            TempData["success"] = $" {productName} product successfully deleted from your cart";
+            TempData["success"] = $" {productName} product deleted successfully from your cart";
             return RedirectToAction(nameof(Index));
         }
 
