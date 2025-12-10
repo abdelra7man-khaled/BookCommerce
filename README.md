@@ -1,4 +1,4 @@
-# 📚 BookStore Ecommerce - ASP.NET Core 8
+# 📚 BookStore Ecommerce - ASP.NET Core 9
 
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-purple) ![Status](https://img.shields.io/badge/Status-Completed-success) ![License](https://img.shields.io/badge/License-MIT-blue)
 
