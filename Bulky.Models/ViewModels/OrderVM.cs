@@ -2,7 +2,7 @@
 {
     public class OrderVM
     {
-        OrderHeader OrderHeader { get; set; }
-        IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public OrderHeader OrderHeader { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
     }
 }
