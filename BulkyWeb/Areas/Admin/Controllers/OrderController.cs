@@ -1,4 +1,4 @@
-﻿using BulkyBook.DataAccess.Repository;
+﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     //[Authorize(Roles = StaticDetails.Role_Admin)]
-    public class OrderController(UnitOfWork _unitOfWork) : Controller
+    public class OrderController(IUnitOfWork _unitOfWork) : Controller
     {
         public IActionResult Index()
         {
