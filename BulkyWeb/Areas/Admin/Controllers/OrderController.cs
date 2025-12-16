@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = StaticDetails.Role_Admin)]
+    [Authorize]
     public class OrderController(IUnitOfWork _unitOfWork) : Controller
     {
         [BindProperty]
@@ -62,6 +62,47 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             TempData["success"] = "Order Details Updated Successfully";
 
             return RedirectToAction(nameof(Details), new { orderId = orderHeader.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = StaticDetails.Role_Admin + "," + StaticDetails.Role_Employee)]
+        public IActionResult StartProcessing()
+        {
+            _unitOfWork.OrderHeader.UpdateStatus(orderVM.OrderHeader.Id, StaticDetails.StatusInProcess);
+            _unitOfWork.Save();
+
+
+            TempData["success"] = "Order Details Updated Successfully";
+
+            return RedirectToAction(nameof(Details), new { orderId = orderVM.OrderHeader.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = StaticDetails.Role_Admin + "," + StaticDetails.Role_Employee)]
+        public IActionResult ShipOrder()
+        {
+            var orderHeader = _unitOfWork.OrderHeader.Get(o => o.Id == orderVM.OrderHeader.Id);
+            if (orderHeader is null)
+            {
+                return NotFound("Order Not Exist");
+            }
+
+            orderHeader.Carrier = orderVM.OrderHeader.Carrier;
+            orderHeader.TrackingNumber = orderVM.OrderHeader.TrackingNumber;
+            orderHeader.OrderStatus = StaticDetails.StatusShipped;
+            orderHeader.ShippingDate = DateTime.Now;
+
+            if (orderHeader.PaymentStatus == StaticDetails.PaymentStatusDelayedPayment)
+            {
+                orderHeader.PaymentDueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(30));
+            }
+            _unitOfWork.OrderHeader.Update(orderHeader);
+            _unitOfWork.Save();
+
+
+            TempData["success"] = "Order Shipped Successfully";
+
+            return RedirectToAction(nameof(Details), new { orderId = orderVM.OrderHeader.Id });
         }
 
         #region API CALLS
