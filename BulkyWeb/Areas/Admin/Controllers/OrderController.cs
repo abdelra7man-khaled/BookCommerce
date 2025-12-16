@@ -2,6 +2,7 @@
 using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -10,6 +11,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
     //[Authorize(Roles = StaticDetails.Role_Admin)]
     public class OrderController(IUnitOfWork _unitOfWork) : Controller
     {
+        [BindProperty]
+        public OrderVM orderVM { get; set; }
         public IActionResult Index()
         {
             return View();
@@ -17,13 +20,47 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         public IActionResult Details(int orderId)
         {
-            OrderVM orderVM = new()
+            orderVM = new()
             {
                 OrderHeader = _unitOfWork.OrderHeader.Get(o => o.Id == orderId, includeProperties: "ApplicationUser")!,
                 OrderDetails = _unitOfWork.OrderDetail.GetAll(o => o.OrderHeaderId == orderId, includeProperties: "Product")
             };
 
             return View(orderVM);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = StaticDetails.Role_Admin + "," + StaticDetails.Role_Employee)]
+        public IActionResult UpdateOrderDetails()
+        {
+            var orderHeader = _unitOfWork.OrderHeader.Get(o => o.Id == orderVM.OrderHeader.Id);
+            if (orderHeader is null)
+            {
+                return NotFound("Order Not Found");
+            }
+
+            orderHeader.Name = orderVM.OrderHeader.Name;
+            orderHeader.PhoneNumber = orderVM.OrderHeader.PhoneNumber;
+            orderHeader.StreetAddress = orderVM.OrderHeader.StreetAddress;
+            orderHeader.City = orderVM.OrderHeader.City;
+            orderHeader.State = orderVM.OrderHeader.State;
+            orderHeader.PostalCode = orderVM.OrderHeader.PostalCode;
+
+            if (!string.IsNullOrEmpty(orderVM.OrderHeader.Carrier))
+            {
+                orderHeader.Carrier = orderVM.OrderHeader.Carrier;
+            }
+            if (!string.IsNullOrEmpty(orderVM.OrderHeader.TrackingNumber))
+            {
+                orderHeader.TrackingNumber = orderVM.OrderHeader.TrackingNumber;
+            }
+
+            _unitOfWork.OrderHeader.Update(orderHeader);
+            _unitOfWork.Save();
+
+            TempData["success"] = "Order Details Updated Successfully";
+
+            return RedirectToAction(nameof(Details), new { orderId = orderHeader.Id });
         }
 
         #region API CALLS
