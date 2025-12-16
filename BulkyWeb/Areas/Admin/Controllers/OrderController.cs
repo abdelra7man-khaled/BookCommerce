@@ -41,7 +41,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     orderHeaders = orderHeaders.Where(o => o.OrderStatus == StaticDetails.StatusInProcess);
                     break;
                 case "pending":
-                    orderHeaders = orderHeaders.Where(o => o.OrderStatus == StaticDetails.StatusPending);
+                    orderHeaders = orderHeaders.Where(o => o.PaymentStatus == StaticDetails.PaymentStatusDelayedPayment);
                     break;
                 case "completed":
                     orderHeaders = orderHeaders.Where(o => o.OrderStatus == StaticDetails.StatusShipped);
@@ -52,6 +52,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 default:
                     break;
             }
+
             return Json(new { data = orderHeaders });
         }
 
