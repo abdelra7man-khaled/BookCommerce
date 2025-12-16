@@ -241,11 +241,11 @@
                              {
                                 @if(Model.OrderHeader.OrderStatus == StaticDetails.StatusApproved)
                                 {
-                                    <button type="submit" asp-action="StartProcessing" class="btn btn-primary form-control my-1">Start Processing</button>
+                                    <button asp-action="StartProcessing" type="submit"  class="btn btn-primary form-control my-1">Start Processing</button>
                                 }
                                 @if(Model.OrderHeader.OrderStatus == StaticDetails.StatusInProcess)
                                 {
-                                    <button type="submit" asp-action="ShipOrder" onclick="return validateInput()" class="btn btn-primary form-control my-1">Ship Order</button>
+                                    <button asp-action="ShipOrder" type="submit" onclick="return validateInput()" class="btn btn-primary form-control my-1">Ship Order</button>
 								}
                                 @if ( 
                                     Model.OrderHeader.OrderStatus != StaticDetails.StatusRefunded 
@@ -253,7 +253,7 @@
                                      && Model.OrderHeader.OrderStatus != StaticDetails.StatusShipped
                                 )
                                 {
-                                    <button type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
+                                    <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
 								}
 							}
                             

@@ -4,6 +4,7 @@ using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -101,6 +102,44 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
 
             TempData["success"] = "Order Shipped Successfully";
+
+            return RedirectToAction(nameof(Details), new { orderId = orderVM.OrderHeader.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = StaticDetails.Role_Admin + "," + StaticDetails.Role_Employee)]
+        public IActionResult CancelOrder()
+        {
+            var orderHeader = _unitOfWork.OrderHeader.Get(o => o.Id == orderVM.OrderHeader.Id);
+            if (orderHeader is null)
+            {
+                return NotFound("Order Not Exist");
+            }
+
+            if (orderHeader.PaymentStatus is StaticDetails.PaymentStatusApproved)
+            {
+                var options = new RefundCreateOptions
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntentId
+                };
+
+                var service = new RefundService();
+                Refund refund = service.Create(options);
+
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, StaticDetails.StatusCaneclled,
+                                                                     StaticDetails.StatusRefunded);
+            }
+            else
+            {
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, StaticDetails.StatusCaneclled,
+                                                                     StaticDetails.StatusCaneclled);
+            }
+
+            _unitOfWork.Save();
+
+
+            TempData["success"] = "Order Caneclled Successfully";
 
             return RedirectToAction(nameof(Details), new { orderId = orderVM.OrderHeader.Id });
         }
