@@ -16,7 +16,7 @@ namespace BulkyBookWeb.ViewComponents
             {
                 if (HttpContext.Session.GetInt32(StaticDetails.SessionCart) is null)
                 {
-                    HttpContext.Session.SetInt32("SessionCart",
+                    HttpContext.Session.SetInt32(StaticDetails.SessionCart,
                     _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value).Count());
                 }
                 return View(HttpContext.Session.GetInt32(StaticDetails.SessionCart));
@@ -26,8 +26,6 @@ namespace BulkyBookWeb.ViewComponents
                 HttpContext.Session.Clear();
                 return View(0);
             }
-
-
         }
     }
 }
