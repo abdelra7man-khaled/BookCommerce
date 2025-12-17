@@ -196,12 +196,14 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             _unitOfWork.ShoppingCart.Update(cart);
             _unitOfWork.Save();
 
+
+
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult DecreaseQuantity(int cartId)
         {
-            var cart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId);
+            var cart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, tracked: true);
             if (cart is null)
             {
                 return NotFound("Cart not found");
@@ -209,6 +211,9 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
             if (cart.Count <= 1)
             {
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart,
+               _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cart.ApplicationUserId).Count() - 1);
+
                 _unitOfWork.ShoppingCart.Remove(cart);
             }
             else
@@ -223,7 +228,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult DeleteFromCart(int cartId)
         {
-            var cart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, includeProperties: "Product");
+            var cart = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, includeProperties: "Product", tracked: true);
             if (cart is null)
             {
                 return NotFound("Cart not found");
@@ -231,8 +236,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
             string productName = cart.Product?.Title ?? string.Empty;
 
+
+            HttpContext.Session.SetInt32(StaticDetails.SessionCart,
+               _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == cart.ApplicationUserId).Count() - 1);
+
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
+
             TempData["success"] = $" {productName} product deleted successfully from your cart";
             return RedirectToAction(nameof(Index));
         }
