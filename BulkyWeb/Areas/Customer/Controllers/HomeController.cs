@@ -21,16 +21,6 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            var claimsIdentity = User.Identity! as ClaimsIdentity;
-            var claim = claimsIdentity!.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim != null)
-            {
-                // Store Number Of Products In Session
-                HttpContext.Session.SetInt32(StaticDetails.SessionCart,
-                    (_unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserId == claim.Value))!.Count());
-            }
-
             IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(products);
         }
