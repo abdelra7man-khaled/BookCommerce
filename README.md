@@ -53,7 +53,7 @@ The solution follows a strict **N-Tier Architecture** to ensure separation of co
 * **ORM:** Entity Framework Core
 * **Front-End:** HTML5, CSS3, Bootstrap 5, jQuery
 * **Payment Gateway:** Stripe API
-* **Cloud Deployment:** Microsoft Azure App Service / Azure SQL
+<!-- * **Cloud Deployment:** Microsoft Azure App Service / Azure SQL
 
 ---
 
@@ -62,4 +62,4 @@ The solution follows a strict **N-Tier Architecture** to ensure separation of co
 This project is configured for easy deployment to **Microsoft Azure**.
 1.  Create an Azure App Service and Azure SQL Database.
 2.  Update the connection string in the Azure Configuration tab.
-3.  Publish directly from Visual Studio via the "Publish" profile.
+3.  Publish directly from Visual Studio via the "Publish" profile. -->
