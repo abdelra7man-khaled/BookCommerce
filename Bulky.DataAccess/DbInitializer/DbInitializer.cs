@@ -29,7 +29,7 @@ namespace BulkyBook.DataAccess.DbInitializer
                     _context.Database.Migrate();
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex) { }
 
             // Create roles if they are not created
             if (!_roleManager.RoleExistsAsync(StaticDetails.Role_Customer).GetAwaiter().GetResult())
