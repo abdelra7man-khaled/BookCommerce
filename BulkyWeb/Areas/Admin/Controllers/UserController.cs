@@ -24,11 +24,25 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         public IActionResult GetAll()
         {
             List<ApplicationUser> users = _context.ApplicationUsers.Include(u => u.Company).ToList();
+
+            var userRoles = _context.UserRoles.ToList();
+            var roles = _context.Roles.ToList();
+
+            foreach (var user in users)
+            {
+                var roleId = userRoles.FirstOrDefault(u => u.UserId == user.Id)?.RoleId;
+                user.Role = roles.FirstOrDefault(r => r.Id == roleId)?.Name!;
+
+                if (user.Company is null)
+                {
+                    user.Company = new() { Name = string.Empty };
+                }
+            }
             return Json(new { data = users });
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int? id)
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string id)
         {
             return Json(new { success = true, message = "the company deleted successfully" });
         }
