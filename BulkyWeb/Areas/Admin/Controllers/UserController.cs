@@ -1,8 +1,10 @@
 ﻿using BulkyBook.DataAccess.Data;
 using BulkyBook.Models;
+using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -15,6 +17,30 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult RoleManagement(string userId)
+        {
+            string roleId = _context.UserRoles.FirstOrDefault(u => u.UserId == userId)!.RoleId;
+
+            RoleManagementVM roleManagementVM = new()
+            {
+                ApplicationUser = _context.ApplicationUsers.FirstOrDefault(u => u.Id == userId)!,
+                Roles = _context.Roles.Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                }),
+                Companies = _context.Companies.Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                })
+            };
+
+            roleManagementVM.ApplicationUser.Role = _context.Roles.FirstOrDefault(r => r.Id == roleId)?.Name!;
+
+            return View(roleManagementVM);
         }
 
 
@@ -50,15 +76,15 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error while Locking/Unlocking" });
             }
 
-            if (user.LockoutEnd is not null && user.LockoutEnd > DateTime.Now)
+            if (user.LockoutEnd is not null && user.LockoutEnd > DateTimeOffset.UtcNow)
             {
                 // user is currently locked, we will unlock them
-                user.LockoutEnd = DateTime.Now;
+                user.LockoutEnd = DateTimeOffset.UtcNow;
             }
             else
             {
                 // user is currently unlocked, we will lock them
-                user.LockoutEnd = DateTime.Now.AddYears(100);
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100);
             }
             _context.SaveChanges();
 
