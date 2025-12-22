@@ -26,5 +26,8 @@ namespace BulkyBook.Models
         [ValidateNever]
         public Category Category { get; set; }
 
+        [ValidateNever]
+        public ICollection<ProductImage> ProductImages { get; set; }
+
     }
 }

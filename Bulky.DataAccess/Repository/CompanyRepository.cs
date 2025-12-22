@@ -13,7 +13,7 @@ namespace BulkyBook.DataAccess.Repository
         }
         public void Update(Company companyToUpdate)
         {
-            _context.Update(companyToUpdate);
+            _context.Companies.Update(companyToUpdate);
         }
 
     }

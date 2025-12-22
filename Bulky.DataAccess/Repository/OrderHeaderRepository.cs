@@ -13,7 +13,7 @@ namespace BulkyBook.DataAccess.Repository
         }
         public void Update(OrderHeader orderHeaderToUpdate)
         {
-            _context.Update(orderHeaderToUpdate);
+            _context.OrderHeaders.Update(orderHeaderToUpdate);
         }
 
         public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
