@@ -50,33 +50,11 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveChanges(ProductVM productVM, IFormFile? file)
+        public IActionResult SaveChanges(ProductVM productVM, List<IFormFile?> files)
         {
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _webHostEnviroment.WebRootPath;
-                if (file != null)
-                {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = Path.Combine(wwwRootPath, @"images\products");
-
-                    //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    //{
-                    //    string oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
-
-                    //    if (System.IO.File.Exists(oldImagePath))
-                    //    {
-                    //        System.IO.File.Delete(oldImagePath);
-                    //    }
-                    //}
-
-                    //using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    //{
-                    //    file.CopyTo(fileStream);
-                    //}
-
-                    //productVM.Product.ImageUrl = @"\images\products\" + fileName;
-                }
 
                 bool isNewProduct = false;
                 if (productVM.Product.Id == 0)
@@ -89,6 +67,43 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     _unitOfWork.Product.Update(productVM.Product);
                 }
                 _unitOfWork.Save();
+
+                if (files != null)
+                {
+                    foreach (var file in files)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string productPath = @"images\products\product-" + productVM.Product.Id;
+                        string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                        if (!Directory.Exists(finalPath))
+                        {
+                            Directory.CreateDirectory(finalPath);
+                        }
+
+                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        ProductImage productImage = new()
+                        {
+                            ProductId = productVM.Product.Id,
+                            ImageUrl = @"\" + productPath + @"\" + fileName
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                        {
+                            productVM.Product.ProductImages = new List<ProductImage>();
+                        }
+                        productVM.Product.ProductImages.Add(productImage);
+                    }
+
+                    _unitOfWork.Product.Update(productVM.Product);
+                    _unitOfWork.Save();
+
+                }
+
                 TempData["success"] = $"Product {(isNewProduct ? "created" : "updated")} successfully";
                 return RedirectToAction("Index");
             }
