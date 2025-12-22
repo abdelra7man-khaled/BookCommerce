@@ -3,6 +3,7 @@ using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = StaticDetails.Role_Admin)]
-    public class UserController(AppDbContext _context) : Controller
+    public class UserController(AppDbContext _context, UserManager<IdentityUser> _userManager) : Controller
     {
         [HttpGet]
         public IActionResult Index()
@@ -43,6 +44,38 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             return View(roleManagementVM);
         }
 
+        [HttpPost]
+        public IActionResult SaveUpdate(RoleManagementVM roleManagementVM)
+        {
+            string roleId = _context.UserRoles
+                .FirstOrDefault(u => u.UserId == roleManagementVM.ApplicationUser.Id)!.RoleId;
+
+            string previosRole = _context.Roles.FirstOrDefault(r => r.Id == roleId)?.Name!;
+
+            // role is updated by admin
+            if (previosRole != roleManagementVM.ApplicationUser.Role)
+            {
+                ApplicationUser appUser = _context.ApplicationUsers
+                    .FirstOrDefault(u => u.Id == roleManagementVM.ApplicationUser.Id)!;
+                if (roleManagementVM.ApplicationUser.Role == StaticDetails.Role_Company)
+                {
+                    appUser.CompanyId = roleManagementVM.ApplicationUser.CompanyId;
+                }
+                if (previosRole == StaticDetails.Role_Company)
+                {
+                    appUser.CompanyId = null;
+                }
+
+                _context.SaveChanges();
+
+                _userManager.RemoveFromRoleAsync(appUser, previosRole).GetAwaiter().GetResult();
+                _userManager.AddToRoleAsync(appUser,
+                                roleManagementVM.ApplicationUser.Role).GetAwaiter().GetResult();
+
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
         #region API CALLS
 
