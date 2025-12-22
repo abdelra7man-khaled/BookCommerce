@@ -41,7 +41,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             else
             {
                 // Update
-                productVM.Product = _unitOfWork.Product.Get(p => p.Id == id)!;
+                productVM.Product = _unitOfWork.Product.Get(p => p.Id == id, includeProperties: "ProductImages")!;
                 if (productVM.Product == null)
                     return NotFound();
 
