@@ -44,7 +44,25 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LockUnlock([FromBody] string id)
         {
-            return Json(new { success = true, message = "the company deleted successfully" });
+            var user = _context.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+            if (user is null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+
+            if (user.LockoutEnd is not null && user.LockoutEnd > DateTime.Now)
+            {
+                // user is currently locked, we will unlock them
+                user.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                // user is currently unlocked, we will lock them
+                user.LockoutEnd = DateTime.Now.AddYears(100);
+            }
+            _context.SaveChanges();
+
+            return Json(new { success = true, message = "Operation Successful" });
         }
 
         #endregion
